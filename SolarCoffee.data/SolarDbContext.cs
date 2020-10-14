@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using SolarCoffee.data.models;
 
-
 namespace SolarCoffee.data
 {
     public class SolarDbContext : IdentityDbContext
