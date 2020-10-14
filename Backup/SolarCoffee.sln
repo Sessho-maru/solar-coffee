@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30104.148
+# Visual Studio 15
+VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolarCoffee.data", "SolarCoffee.data\SolarCoffee.data.csproj", "{4EDF40AA-2ADF-478B-8CDC-2DDE5364FE10}"
 EndProject
@@ -19,6 +19,9 @@ Global
 		Release|Any CPU = Release|Any CPU
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{4EDF40AA-2ADF-478B-8CDC-2DDE5364FE10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -69,11 +72,5 @@ Global
 		{68295CBF-5ED9-41E0-B036-CE5E5098D3EB}.Release|x64.Build.0 = Release|Any CPU
 		{68295CBF-5ED9-41E0-B036-CE5E5098D3EB}.Release|x86.ActiveCfg = Release|Any CPU
 		{68295CBF-5ED9-41E0-B036-CE5E5098D3EB}.Release|x86.Build.0 = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {23FF3458-DAF1-4452-B5F6-DEBEB711C0FD}
 	EndGlobalSection
 EndGlobal
