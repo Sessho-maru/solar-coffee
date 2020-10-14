@@ -10,6 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using SolarCoffee.data;
+using Microsoft.EntityFrameworkCore;
 
 namespace SolarCoffee.web
 {
@@ -26,6 +28,10 @@ namespace SolarCoffee.web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddDbContext<SolarDbContext>(opts => {
+                opts.EnableDetailedErrors();
+                opts.UseNpgsql(Configuration.GetConnectionString("solar.dev"));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
