@@ -1,8 +1,8 @@
 using System;
 
-namespace SolarCoffee.data.models
+namespace SolarCoffee.web.ViewModels
 {
-    public class ProductInventory
+    public class ProductInventoryModel
     {
         public int id { get; set; }
         public DateTime createdOn { get; set; }
@@ -11,6 +11,6 @@ namespace SolarCoffee.data.models
         public int quantityOnHand { get; set; }
         public int idealQuantity { get; set; }
 
-        public Product Product { get; set; }
+        public ProductModel Product { get; set; }       
     }
 }

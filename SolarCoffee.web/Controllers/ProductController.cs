@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using SolarCoffee.Services;
 using SolarCoffee.Services.Product;
 
 namespace SolarCoffee.web.Controllers
@@ -19,8 +20,15 @@ namespace SolarCoffee.web.Controllers
         public ActionResult GetProduct()
         {
             _logger.LogInformation("Getting all products");
-            _productService.GetAllProducts();
-            return Ok("");
+            return Ok(_productService.GetAllProducts());
+        }
+
+        [HttpPatch("/api/product/{id}")]
+        public ActionResult ArchiveProduct(int id)
+        {
+            _logger.LogInformation("Archiving a product");
+            ServiceResponse<data.models.Product> result = _productService.ArchiveProductAndReturnResponseAsSelf(id);
+            return Ok(result);
         }
     }
 }

@@ -10,8 +10,8 @@ using SolarCoffee.data;
 namespace SolarCoffee.data.Migrations
 {
     [DbContext(typeof(SolarDbContext))]
-    [Migration("20201014074602_ProductInventorySales")]
-    partial class ProductInventorySales
+    [Migration("20201018052348_Customers")]
+    partial class Customers
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -222,7 +222,7 @@ namespace SolarCoffee.data.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<DateTime>("creataedOn")
+                    b.Property<DateTime>("createdOn")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("firstName")
@@ -267,7 +267,7 @@ namespace SolarCoffee.data.Migrations
                         .HasColumnType("character varying(32)")
                         .HasMaxLength(32);
 
-                    b.Property<DateTime>("creataedOn")
+                    b.Property<DateTime>("createdOn")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("postalCode")
@@ -293,7 +293,7 @@ namespace SolarCoffee.data.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<DateTime>("creataedOn")
+                    b.Property<DateTime>("createdOn")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("description")
@@ -331,7 +331,7 @@ namespace SolarCoffee.data.Migrations
                     b.Property<int?>("Productid")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("creataedOn")
+                    b.Property<DateTime>("createdOn")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("idealQuantity")
@@ -383,7 +383,7 @@ namespace SolarCoffee.data.Migrations
                     b.Property<int?>("Customerid")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("creataedOn")
+                    b.Property<DateTime>("createdOn")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("isPaid")

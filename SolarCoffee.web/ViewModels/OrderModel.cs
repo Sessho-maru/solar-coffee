@@ -1,16 +1,16 @@
 using System;
 using System.Collections.Generic;
 
-namespace SolarCoffee.data.models
+namespace SolarCoffee.web.ViewModels
 {
-    public class SalesOrder
+    public class OrderModel
     {
         public int Id { get; set; }
         public DateTime createdOn { get; set; }
         public DateTime updatedOn { get; set; }
 
-        public Customer Customer { get; set; }
-        public List<SalesOrderItem> SalesOrderItems { get; set; }
+        public CustomerModel Customer { get; set; }
+        public List<web.ViewModels.SalesOrderItemModel> SalesOrderItems { get; set; }
         public bool isPaid { get; set; }
     }
 }
