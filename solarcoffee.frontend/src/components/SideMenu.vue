@@ -41,7 +41,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import SolarButton from "@/components/SolarButton.vue";
+import SolarButton from "../components/SolarButton.vue";
 
 @Component({
     name: 'SideMenu',

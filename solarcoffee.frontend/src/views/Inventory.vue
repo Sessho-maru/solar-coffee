@@ -3,6 +3,16 @@
         <h1 id="inventoryTitle">Inventory Dashboard</h1>
         <hr />
 
+        <div class="inventory-actions">
+            <SolarButton v-on:click.native="showNewProductModal">
+                Add New Item
+            </SolarButton>
+
+            <SolarButton v-on:click.native="showNewShipmentModal">
+                Receive Shipment
+            </SolarButton>
+        </div>
+
         <table id="inventoryTable" class="table">
             <tr>
                 <th>Item</th>
@@ -32,19 +42,35 @@
                 </td>
             </tr>
         </table>
-    </div>    
+
+        <NewProductModal v-if="isNewProductModalVisable" @save:newProduct="saveNewProduct" @close:modal="closeModal"/>
+        <ShipmentModal v-if="isShipmentModalVisable" v-bind:inventories="inventories" @save:newShipment="saveNewShipment" @close:modal="closeModal"/>
+        
+    </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import { IProductInventory, IProduct } from '../types/Product';
+import { IShipment } from '../types/Shipment';
+import SolarButton from '../components/SolarButton.vue';
+import NewProductModal from '../components/modals/NewProductModal.vue';
+import ShipmentModal from '../components/modals/ShipmentModal.vue';
 
 @Component({
     name: 'Inventory',
-    components: {}
+    components: {
+        SolarButton,
+        NewProductModal,
+        ShipmentModal,
+    },
 })
 
 export default class Inventory extends Vue {
+
+    isNewProductModalVisable: boolean = false;
+    isShipmentModalVisable: boolean = false;
+
     inventories: IProductInventory[] = [
         {
             id: 1,
@@ -81,6 +107,32 @@ export default class Inventory extends Vue {
             idealQuantity: 40
         },
     ];
+
+    saveNewProduct(newProduct: IProduct)
+    {
+        console.log(newProduct);
+    }
+
+    saveNewShipment(newShipment: IShipment)
+    {
+        console.log(newShipment);
+    }
+
+    showNewProductModal()
+    {
+        this.isNewProductModalVisable = true;
+    }
+
+    showNewShipmentModal()
+    {
+        this.isShipmentModalVisable = true;
+    }
+
+    closeModal()
+    {
+        this.isNewProductModalVisable = false;
+        this.isShipmentModalVisable = false;
+    }
 }
 </script>
 
