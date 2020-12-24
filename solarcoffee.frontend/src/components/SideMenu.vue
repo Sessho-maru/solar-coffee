@@ -6,19 +6,19 @@
         
         <h1>Management Portal</h1>
 
-        <SolarButton id="menuInventory" v-bind:href="'/inventory'" v-bind:isFullWidth="true">
+        <SolarButton id="menuInventory" @SBClicked="goToRoute('/inventory')" v-bind:isFullWidth="'true'">
             Inventory
         </SolarButton>
 
-        <SolarButton id="menuCustomers" v-bind:href="'/customers'" v-bind:isFullWidth="true">
+        <SolarButton id="menuCustomers" @SBClicked="goToRoute('/customers')" v-bind:isFullWidth="'true'">
             Manage Customers
         </SolarButton>
 
-        <SolarButton id="menuInvoice" v-bind:href="'/invoice/new'" v-bind:isFullWidth="true">
+        <SolarButton id="menuInvoice" @SBClicked="goToRoute('/invoice/new')" v-bind:isFullWidth="'true'">
             New Invoice
         </SolarButton>
 
-        <SolarButton id="menuOrders" v-bind:href="'/orders'" v-bind:isFullWidth="true">
+        <SolarButton id="menuOrders" @SBClicked="goToRoute('/orders')" v-bind:isFullWidth="'true'">
             Orders
         </SolarButton>
 
@@ -50,7 +50,15 @@ import SolarButton from "../components/SolarButton.vue";
     }
 })
 
-export default class SideMenu extends Vue {}
+export default class SideMenu extends Vue {
+    goToRoute(href: string)
+    {
+        if (href !== this.$router.currentRoute.path)
+        {
+            this.$router.push(href);
+        }
+    }
+}
 </script>
 
 <style scoped lang="scss">

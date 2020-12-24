@@ -3,7 +3,7 @@
         <h1 id="inventoryTitle">Inventory Dashboard</h1>
         <hr />
 
-        <div class="inventory-actions">
+        <div class="inventory-action">
             <SolarButton v-on:click.native="showNewProductModal">
                 Add New Item
             </SolarButton>
@@ -26,7 +26,7 @@
                 <td>
                     {{ inventory.product.name }}
                 </td>
-                <td>
+                <td v-bind:class="`${ applyColor(inventory.quantityOnHand, inventory.idealQuantity) }`">
                     {{ inventory.quantityOnHand }}
                 </td>
                 <td>
@@ -36,8 +36,8 @@
                     {{ inventory.product.isTaxable ?  "Yes" : "No" }}
                 </td>
                 <td>
-                    <div>
-                        X
+                    <div class="material-icons product-archive" v-on:click="archiveProduct(inventory.id)">
+                        clear
                     </div>
                 </td>
             </tr>
@@ -56,6 +56,11 @@ import { IShipment } from '../types/Shipment';
 import SolarButton from '../components/SolarButton.vue';
 import NewProductModal from '../components/modals/NewProductModal.vue';
 import ShipmentModal from '../components/modals/ShipmentModal.vue';
+import InventoryService from '../services/inventory_service';
+import ProductService from '../services/product_service';
+
+const inventoryService = new InventoryService();
+const productService = new ProductService();
 
 @Component({
     name: 'Inventory',
@@ -71,51 +76,37 @@ export default class Inventory extends Vue {
     isNewProductModalVisable: boolean = false;
     isShipmentModalVisable: boolean = false;
 
-    inventories: IProductInventory[] = [
-        {
-            id: 1,
-            createdOn: new Date(),
-            updatedOn: new Date(),
-            product: {
-                id: 1,
-                name: "Some Product",
-                description: "Good stuff",
-                price: 100,
-                createdOn: new Date(),
-                updatedOn: new Date(),
-                isTaxable: true,
-                isArchived: false
-            },
-            quantityOnHand: 100,
-            idealQuantity: 100
-        },
-        {
-            id: 2,
-            createdOn: new Date(),
-            updatedOn: new Date(),
-            product: {
-                id: 2,
-                name: "Another Product",
-                description: "Good stuff",
-                price: 150,
-                createdOn: new Date(),
-                updatedOn: new Date(),
-                isTaxable: true,
-                isArchived: false
-            },
-            quantityOnHand: 40,
-            idealQuantity: 40
-        },
-    ];
+    inventories: IProductInventory[] = [];
 
-    saveNewProduct(newProduct: IProduct)
+    created()
     {
-        console.log(newProduct);
+        this.fetchData();
     }
 
-    saveNewShipment(newShipment: IShipment)
+    async fetchData()
     {
-        console.log(newShipment);
+        this.inventories = await inventoryService.getInventory();
+        console.log(this.inventories);
+    }   
+
+    async saveNewProduct(newProduct: IProduct)
+    {
+        await productService.addProduct(newProduct);
+        this.isNewProductModalVisable = false;
+        await this.fetchData();
+    }
+
+    async archiveProduct(productId: number)
+    {
+        await productService.archiveProduct(productId);
+        await this.fetchData();
+    }
+
+    async saveNewShipment(newShipment: IShipment)
+    {
+        await inventoryService.updateInventoryQuantity(newShipment);
+        this.isShipmentModalVisable = false;
+        await this.fetchData();
     }
 
     showNewProductModal()
@@ -133,9 +124,50 @@ export default class Inventory extends Vue {
         this.isNewProductModalVisable = false;
         this.isShipmentModalVisable = false;
     }
+
+    applyColor(current: number, target: number)
+    {
+        if (current <= 0)
+        {
+            return "red";
+        }
+
+        if (Math.abs(target-current) > 8)
+        {
+            return "yellow";
+        }
+
+        return "green";
+    }
 }
 </script>
 
 <style lang="scss" scoped>
+@import "@/scss/global.scss";
+    .green {
+        font-weight: bold;
+        color: $solar-green;
+    }
 
+    .yellow {
+        font-weight: bold;
+        color: $solar-yellow;
+    }
+
+    .red {
+        font-weight: bold;
+        color: $solar-red;
+    }
+
+    .inventory-action {
+        display: flex;
+        margin-bottom: 0.8rem;
+    }
+
+    .product-archive {
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 1.2rem;
+        color: $solar-red;
+    }
 </style>

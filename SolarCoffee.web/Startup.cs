@@ -2,14 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Serialization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using SolarCoffee.data;
 using SolarCoffee.Services.Product;
@@ -31,15 +29,20 @@ namespace SolarCoffee.web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(options => {
+                options.SerializerSettings.ContractResolver = new DefaultContractResolver {
+                    NamingStrategy = new CamelCaseNamingStrategy()
+                };
+            });
+
             services.AddDbContext<SolarDbContext>(opts => {
                 opts.EnableDetailedErrors();
                 opts.UseNpgsql(Configuration.GetConnectionString("solar.dev"));
             });
 
+            services.AddTransient<IInventoryService, InventoryService>();
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<ICustomerService, CustomerService>();
-            services.AddTransient<IInventoryService, InventoryService>();
             services.AddTransient<IOrderService, OrderService>();
         }
 
@@ -54,6 +57,14 @@ namespace SolarCoffee.web
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(
+                builder => builder
+                    .WithOrigins("http://localhost:8080")
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials()
+            );
 
             app.UseAuthorization();
 

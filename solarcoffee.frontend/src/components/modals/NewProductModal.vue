@@ -27,10 +27,10 @@
         </template>
 
         <template v-slot:footer>
-            <SolarButton @modalClicked="emitSaveProduct">
+            <SolarButton @SBClicked="emitSaveProduct">
                 Save Product
             </SolarButton>
-            <SolarButton @modalClicked="emitCloseModal">
+            <SolarButton @SBClicked="emitCloseModal">
                 Close        
             </SolarButton>
         </template>

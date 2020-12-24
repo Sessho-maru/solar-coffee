@@ -1,11 +1,6 @@
 <template>
     <div class="link">
-        <button v-if="href" v-on:click="visitRoute" v-bind:class="['solar-button', isFullWidth ? 'full-width' : '']">
-            <slot>
-              
-            </slot>
-        </button>
-        <button v-if="!href" v-on:click="emitModalClicked" v-bind:class="['solar-button', isFullWidth ? 'full-width' : '']">
+        <button v-on:click="buttonClicked" v-bind:class="['solar-button', isFullWidth ? 'full-width' : '']">
             <slot>
               
             </slot>
@@ -24,23 +19,13 @@ import { Prop } from 'vue-property-decorator';
 
 export default class SolarButton extends Vue {
     @Prop({required: false, type: String})
-    href?: string;
 
     @Prop({required: false, type: Boolean, default: false})
     isFullWidth?: boolean;
 
-    emitModalClicked()
+    buttonClicked()
     {
-        this.$emit("modalClicked");
-    }
-
-    visitRoute()
-    {
-        if(this.$router.currentRoute.path != this.href)
-        {
-            console.log(this.href);
-            this.$router.push(this.href);
-        }
+        this.$emit("SBClicked");
     }
 }
 </script>
@@ -71,6 +56,7 @@ export default class SolarButton extends Vue {
     &:disabled {
         background: lighten($solar-blue, 15%);
         border-bottom: 2px solid lighten($solar-blue, 20%);
+        cursor: not-allowed;
     }
 }
 

@@ -6,47 +6,48 @@ using SolarCoffee.web.ViewModels;
 using SolarCoffee.web.Serialization;
 using System.Linq;
 
-namespace SolarCoffee.web.Controllers
-{
+namespace SolarCoffee.Web.Controllers {
     [ApiController]
-    public class IventoryController : ControllerBase
+    public class InventoryController : ControllerBase 
     {
-        [ApiController]
-        public class InventoryController : ControllerBase
+        private readonly ILogger<InventoryController> _logger;
+        private readonly IInventoryService _inventoryService;
+
+        public InventoryController(ILogger<InventoryController> logger, IInventoryService inventoryService)
         {
-            private readonly ILogger<InventoryController> _logger;
-            private readonly IInventoryService _inventoryService;
+            _logger = logger;
+            _inventoryService = inventoryService;
+        }
 
-            public InventoryController(ILogger<InventoryController> logger, IInventoryService inventoryService)
+        [HttpGet("/api/inventory")]
+        public ActionResult GetAllInventories()
+        {
+            _logger.LogInformation("Getting all inventory");
+            List<data.models.ProductInventory> inventories = _inventoryService.GetCurrentInventories();
+            List<ProductInventoryModel> inventoryModels = inventories.Select(inventory => new ProductInventoryModel {
+                id = inventory.id,
+                Product = ProductMapper.DataModelToViewModel(inventory.Product),
+                quantityOnHand = inventory.quantityOnHand,
+                idealQuantity = inventory.idealQuantity
+            }).OrderBy(inventory => inventory.Product.name).ToList();
+
+            return Ok(inventoryModels);
+        }
+
+        [HttpPatch("/api/inventory")]
+        public ActionResult UpdateInventory([FromBody] ShipmentModel shipment)
+        {
+            if (ModelState.IsValid == false)
             {
-                _logger = logger;
-                _inventoryService = inventoryService;
+                return BadRequest(ModelState);
             }
+            
+            _logger.LogInformation($"Updating inventory for ProductId: {shipment.ProductId} - Adjustment: {shipment.Adjustment}");
 
-            [HttpGet("/api/inventory")]
-            public ActionResult GetAllInventories()
-            {
-                _logger.LogInformation("Getting all inventory");
-                List<data.models.ProductInventory> inventories = _inventoryService.GetCurrentInventories();
-                List<ProductInventoryModel> inventoryModels = inventories.Select(inventory => new ProductInventoryModel {
-                    id = inventory.id,
-                    Product = ProductMapper.DataModelToViewModel(inventory.Product),
-                    quantityOnHand = inventory.quantityOnHand
-                }).OrderBy(inventory => inventory.Product.name).ToList();
-
-                return Ok(inventoryModels);
-            }
-
-            [HttpPatch("/api/inventory")]
-            public ActionResult UpdateInventory([FromBody] ShipmentModel shipment)
-            {
-                _logger.LogInformation($"Updating inventory for ProductId: {shipment.ProductId} - Adjustment: {shipment.Adjustment}");
-
-                int id = shipment.ProductId;
-                int adjustment = shipment.Adjustment;
-                
-                return Ok(_inventoryService.UpdateUnitsAvailableAndReturnResponse(id, adjustment));
-            }
+            int id = shipment.ProductId;
+            int adjustment = shipment.Adjustment;
+            
+            return Ok(_inventoryService.UpdateUnitsAvailableAndReturnResponse(id, adjustment));
         }
     }
 }

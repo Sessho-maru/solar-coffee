@@ -20,10 +20,10 @@
         </template>
 
         <template v-slot:footer>
-            <SolarButton @modalClicked="emitSaveNewShipment" aria-label="Save new Shipment">
+            <SolarButton @SBClicked="emitSaveNewShipment" aria-label="Save new Shipment">
                 Save Received Shipment
             </SolarButton>
-            <SolarButton @modalClicked="emitCloseModal" aria-label="Close modal">
+            <SolarButton @SBClicked="emitCloseModal" aria-label="Close modal">
                 Close
             </SolarButton>
         </template>
