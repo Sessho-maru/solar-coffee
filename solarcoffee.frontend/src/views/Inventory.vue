@@ -4,11 +4,11 @@
         <hr />
 
         <div class="inventory-action">
-            <SolarButton v-on:click.native="showNewProductModal">
+            <SolarButton @SBClicked="showNewProductModal">
                 Add New Item
             </SolarButton>
 
-            <SolarButton v-on:click.native="showNewShipmentModal">
+            <SolarButton @SBClicked="showNewShipmentModal">
                 Receive Shipment
             </SolarButton>
         </div>
@@ -86,7 +86,6 @@ export default class Inventory extends Vue {
     async fetchData()
     {
         this.inventories = await inventoryService.getInventory();
-        console.log(this.inventories);
     }   
 
     async saveNewProduct(newProduct: IProduct)

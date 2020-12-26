@@ -6,19 +6,19 @@
         
         <h1>Management Portal</h1>
 
-        <SolarButton id="menuInventory" @SBClicked="goToRoute('/inventory')" v-bind:isFullWidth="'true'">
+        <SolarButton id="menuInventory" @SBClicked="goToRoute('/inventory')" v-bind:isFullWidth="true">
             Inventory
         </SolarButton>
 
-        <SolarButton id="menuCustomers" @SBClicked="goToRoute('/customers')" v-bind:isFullWidth="'true'">
+        <SolarButton id="menuCustomers" @SBClicked="goToRoute('/customers')" v-bind:isFullWidth="true">
             Manage Customers
         </SolarButton>
 
-        <SolarButton id="menuInvoice" @SBClicked="goToRoute('/invoice/new')" v-bind:isFullWidth="'true'">
+        <SolarButton id="menuInvoice" @SBClicked="goToRoute('/invoice/new')" v-bind:isFullWidth="true">
             New Invoice
         </SolarButton>
 
-        <SolarButton id="menuOrders" @SBClicked="goToRoute('/orders')" v-bind:isFullWidth="'true'">
+        <SolarButton id="menuOrders" @SBClicked="goToRoute('/orders')" v-bind:isFullWidth="true">
             Orders
         </SolarButton>
 

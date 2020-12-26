@@ -10,8 +10,8 @@ using SolarCoffee.data;
 namespace SolarCoffee.data.Migrations
 {
     [DbContext(typeof(SolarDbContext))]
-    [Migration("20201018052252_CustomerAddress")]
-    partial class CustomerAddress
+    [Migration("20201226145204_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -375,7 +375,7 @@ namespace SolarCoffee.data.Migrations
 
             modelBuilder.Entity("SolarCoffee.data.models.SalesOrder", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
@@ -392,7 +392,7 @@ namespace SolarCoffee.data.Migrations
                     b.Property<DateTime>("updatedOn")
                         .HasColumnType("timestamp without time zone");
 
-                    b.HasKey("Id");
+                    b.HasKey("id");
 
                     b.HasIndex("Customerid");
 
@@ -401,25 +401,23 @@ namespace SolarCoffee.data.Migrations
 
             modelBuilder.Entity("SolarCoffee.data.models.SalesOrderItem", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<int?>("Productid")
+                    b.Property<int?>("SalesOrderid")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("SalesOrderId")
+                    b.Property<int>("productId")
                         .HasColumnType("integer");
 
                     b.Property<int>("quantity")
                         .HasColumnType("integer");
 
-                    b.HasKey("Id");
+                    b.HasKey("id");
 
-                    b.HasIndex("Productid");
-
-                    b.HasIndex("SalesOrderId");
+                    b.HasIndex("SalesOrderid");
 
                     b.ToTable("SalesOrderItems");
                 });
@@ -505,13 +503,9 @@ namespace SolarCoffee.data.Migrations
 
             modelBuilder.Entity("SolarCoffee.data.models.SalesOrderItem", b =>
                 {
-                    b.HasOne("SolarCoffee.data.models.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("Productid");
-
                     b.HasOne("SolarCoffee.data.models.SalesOrder", null)
                         .WithMany("SalesOrderItems")
-                        .HasForeignKey("SalesOrderId");
+                        .HasForeignKey("SalesOrderid");
                 });
 #pragma warning restore 612, 618
         }

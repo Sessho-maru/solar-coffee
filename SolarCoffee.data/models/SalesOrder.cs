@@ -5,7 +5,7 @@ namespace SolarCoffee.data.models
 {
     public class SalesOrder
     {
-        public int Id { get; set; }
+        public int id { get; set; }
         public DateTime createdOn { get; set; }
         public DateTime updatedOn { get; set; }
 

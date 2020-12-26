@@ -4,7 +4,7 @@
         <hr/>
 
         <div class="customer-action">
-            <SolarButton v-on:click.native="showNewCustomerModal">
+            <SolarButton @SBClicked="showNewCustomerModal">
                 Add Customer
             </SolarButton>
         </div>
@@ -75,7 +75,6 @@ export default class Customer extends Vue {
     async fetchData()
     {
         this.customers = await customerService.getCustomers();
-        console.log(this.customers);
     }
 
     async createNewCustomer(newCustomer: ICustomer)

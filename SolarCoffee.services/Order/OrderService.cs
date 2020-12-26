@@ -18,23 +18,22 @@ namespace SolarCoffee.Services.Order
             _productService = productService;
             _inventoryService = inventoryService;
         }
-
         public List<data.models.SalesOrder> GetOrders()
         {
             return _db.SalesOrders
                 .Include(order => order.Customer).ThenInclude(customer => customer.primaryAddress)
-                .Include(order => order.SalesOrderItems).ThenInclude(item => item.Product)
+                // .Include(order => order.SalesOrderItems).ThenInclude(item => item.Product)
                 .ToList();
         }
         public ServiceResponse<bool> GenerateOpenOrderAndReturnResponse(data.models.SalesOrder orders)
         {
             foreach(data.models.SalesOrderItem order in orders.SalesOrderItems)
             {
-                data.models.Product product = _productService.GetproductById(order.Product.id);
+                data.models.Product product = _productService.GetproductById(order.productId);
 
                 if(product == null)
                 {
-                    return ServiceResponse<bool>.Failed(false, $"Product represented as index {order.Product.id} was not found");
+                    return ServiceResponse<bool>.Failed(false, $"Product represented as index {order.productId} was not found");
                 }
 
                 data.models.ProductInventory inventory = _inventoryService.GetByProductId(product.id);

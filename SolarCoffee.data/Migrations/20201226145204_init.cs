@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace SolarCoffee.data.Migrations
 {
-    public partial class ProductsInventorySnapshot : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -263,7 +263,7 @@ namespace SolarCoffee.data.Migrations
                 name: "SalesOrders",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     createdOn = table.Column<DateTime>(nullable: false),
                     updatedOn = table.Column<DateTime>(nullable: false),
@@ -272,7 +272,7 @@ namespace SolarCoffee.data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SalesOrders", x => x.Id);
+                    table.PrimaryKey("PK_SalesOrders", x => x.id);
                     table.ForeignKey(
                         name: "FK_SalesOrders_Customers_Customerid",
                         column: x => x.Customerid,
@@ -285,26 +285,20 @@ namespace SolarCoffee.data.Migrations
                 name: "SalesOrderItems",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     quantity = table.Column<int>(nullable: false),
-                    Productid = table.Column<int>(nullable: true),
-                    SalesOrderId = table.Column<int>(nullable: true)
+                    productId = table.Column<int>(nullable: false),
+                    SalesOrderid = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SalesOrderItems", x => x.Id);
+                    table.PrimaryKey("PK_SalesOrderItems", x => x.id);
                     table.ForeignKey(
-                        name: "FK_SalesOrderItems_Products_Productid",
-                        column: x => x.Productid,
-                        principalTable: "Products",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_SalesOrderItems_SalesOrders_SalesOrderId",
-                        column: x => x.SalesOrderId,
+                        name: "FK_SalesOrderItems_SalesOrders_SalesOrderid",
+                        column: x => x.SalesOrderid,
                         principalTable: "SalesOrders",
-                        principalColumn: "Id",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -361,14 +355,9 @@ namespace SolarCoffee.data.Migrations
                 column: "Productid");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SalesOrderItems_Productid",
+                name: "IX_SalesOrderItems_SalesOrderid",
                 table: "SalesOrderItems",
-                column: "Productid");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SalesOrderItems_SalesOrderId",
-                table: "SalesOrderItems",
-                column: "SalesOrderId");
+                column: "SalesOrderid");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SalesOrders_Customerid",

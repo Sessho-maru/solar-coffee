@@ -5,7 +5,7 @@ namespace SolarCoffee.web.ViewModels
 {
     public class OrderModel
     {
-        public int Id { get; set; }
+        public int id { get; set; }
         public DateTime createdOn { get; set; }
         public DateTime updatedOn { get; set; }
 

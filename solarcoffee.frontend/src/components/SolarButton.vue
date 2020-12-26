@@ -1,6 +1,6 @@
 <template>
     <div class="link">
-        <button v-on:click="buttonClicked" v-bind:class="['solar-button', isFullWidth ? 'full-width' : '']">
+        <button v-on:click="buttonClicked" v-bind:disabled="disabled" v-bind:class="['solar-button', isFullWidth ? 'full-width' : '']">
             <slot>
               
             </slot>
@@ -18,10 +18,11 @@ import { Prop } from 'vue-property-decorator';
 })
 
 export default class SolarButton extends Vue {
-    @Prop({required: false, type: String})
-
-    @Prop({required: false, type: Boolean, default: false})
+    @Prop({  required: false, type: Boolean, default: false })
     isFullWidth?: boolean;
+
+    @Prop({ required: false, type: Boolean, default: false })
+    disabled?: boolean;
 
     buttonClicked()
     {

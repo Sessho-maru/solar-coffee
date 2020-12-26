@@ -22,11 +22,16 @@ namespace SolarCoffee.Services.Inventory
         }
         public ServiceResponse<data.models.ProductInventory> UpdateUnitsAvailableAndReturnResponse(int id, int adjustment)
         {
-            try {
-                data.models.ProductInventory inventory = _db.ProductInventories
+            data.models.ProductInventory inventory = _db.ProductInventories
                 .Include(inventory => inventory.Product)
                 .First(inventory => inventory.Product.id == id);
+            
+            if ((inventory.quantityOnHand + adjustment) < 0)
+            {
+                return ServiceResponse<data.models.ProductInventory>.Failed(null, $"Out of Stock [product({id})]");
+            }
 
+            try {
                 inventory.quantityOnHand += adjustment;
                 CreateSnpashot(inventory);
 

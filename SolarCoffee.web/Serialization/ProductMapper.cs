@@ -9,9 +9,10 @@ namespace SolarCoffee.web.Serialization
             return new data.models.Product{
                 id = product.id,
                 createdOn = product.createdOn,
-                price = product.price,
+                updatedOn = product.updatedOn,
                 name = product.name,
                 description = product.description,
+                price = product.price,
                 isTaxable = product.isTaxable,
                 isArchived = product.isArchived,
             };
@@ -22,9 +23,10 @@ namespace SolarCoffee.web.Serialization
             return new web.ViewModels.ProductModel{
                 id = product.id,
                 createdOn = product.createdOn,
-                price = product.price,
+                updatedOn = product.updatedOn,
                 name = product.name,
                 description = product.description,
+                price = product.price,
                 isTaxable = product.isTaxable,
                 isArchived = product.isArchived,
             };

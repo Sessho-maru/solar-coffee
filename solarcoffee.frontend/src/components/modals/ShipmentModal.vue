@@ -9,8 +9,7 @@
             <label for="product">Product Received:</label>
 
             <select id="product" v-model="selectedProduct">
-                <option disabled value="">Please select one</option>
-                <option v-bind:key="inventory.product.id" v-for="inventory in inventories" v-bind:value="inventory">
+                <option v-bind:key="inventory.product.id" v-for="inventory in inventories" v-bind:value="inventory.product">
                     {{ inventory.product.name }}
                 </option>
             </select>
@@ -65,6 +64,8 @@ export default class ShipmentModal extends Vue{
 
     emitSaveNewShipment()
     {   
+        console.log(this.selectedProduct);
+
         let shipment: IShipment = {
             productId: this.selectedProduct.id,
             adjustment: this.qtyReceived    
