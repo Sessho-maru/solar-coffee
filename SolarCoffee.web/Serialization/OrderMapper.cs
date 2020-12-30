@@ -11,13 +11,15 @@ namespace SolarCoffee.web.Serialization
             List<data.models.SalesOrderItem> salesOrderItems = invoice.Items.Select(item => new data.models.SalesOrderItem {
                 id = item.id,
                 quantity = item.Quantity,
-                productId = item.Product.id
+                productId = item.Product.id,
+                subTotal = item.SubTotal
             }).ToList();
 
             return new data.models.SalesOrder{
                 SalesOrderItems = salesOrderItems,
                 createdOn = DateTime.UtcNow,
                 updatedOn = DateTime.UtcNow,
+                grandTotal = invoice.GrandTotal,
                 isPaid = false
             };
         }
@@ -28,8 +30,9 @@ namespace SolarCoffee.web.Serialization
                 id = order.id,
                 createdOn = order.createdOn,
                 updatedOn = order.updatedOn,
-                SalesOrderItems = OrderItemDataToOrderItemView(order.SalesOrderItems),
                 Customer = CustomerMapper.CustomerDataToCustomerView(order.Customer),
+                SalesOrderItems = OrderItemDataToOrderItemView(order.SalesOrderItems),
+                grandTotal = order.grandTotal,
                 isPaid = order.isPaid
             }).ToList();
         }
@@ -37,9 +40,10 @@ namespace SolarCoffee.web.Serialization
         private static List<web.ViewModels.SalesOrderItemModel> OrderItemDataToOrderItemView(IEnumerable<data.models.SalesOrderItem> orderItems)
         {
             return orderItems.Select(item => new web.ViewModels.SalesOrderItemModel {
+                // Product = GetProductById(item.productId)
                 id = item.id,
                 Quantity = item.quantity,
-                // Product = ProductMapper.DataModelToViewModel(item.Product)
+                SubTotal = item.subTotal
             }).ToList();
         }
     }

@@ -22,7 +22,7 @@ namespace SolarCoffee.Services.Order
         {
             return _db.SalesOrders
                 .Include(order => order.Customer).ThenInclude(customer => customer.primaryAddress)
-                // .Include(order => order.SalesOrderItems).ThenInclude(item => item.Product)
+                .Include(order => order.SalesOrderItems)
                 .ToList();
         }
         public ServiceResponse<bool> GenerateOpenOrderAndReturnResponse(data.models.SalesOrder orders)

@@ -78,7 +78,7 @@ export default class Inventory extends Vue {
 
     inventories: IProductInventory[] = [];
 
-    created()
+    created(): void
     {
         this.fetchData();
     }

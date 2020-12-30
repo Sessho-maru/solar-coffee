@@ -268,6 +268,7 @@ namespace SolarCoffee.data.Migrations
                     createdOn = table.Column<DateTime>(nullable: false),
                     updatedOn = table.Column<DateTime>(nullable: false),
                     Customerid = table.Column<int>(nullable: true),
+                    grandTotal = table.Column<int>(nullable: false),
                     isPaid = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
@@ -289,6 +290,7 @@ namespace SolarCoffee.data.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     quantity = table.Column<int>(nullable: false),
                     productId = table.Column<int>(nullable: false),
+                    subTotal = table.Column<int>(nullable: false),
                     SalesOrderid = table.Column<int>(nullable: true)
                 },
                 constraints: table =>

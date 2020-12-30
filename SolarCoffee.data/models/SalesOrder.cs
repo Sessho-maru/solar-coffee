@@ -11,6 +11,7 @@ namespace SolarCoffee.data.models
 
         public Customer Customer { get; set; }
         public List<SalesOrderItem> SalesOrderItems { get; set; }
+        public int grandTotal { get; set; }
         public bool isPaid { get; set; }
     }
 }

@@ -11,6 +11,7 @@ namespace SolarCoffee.web.ViewModels
 
         public CustomerModel Customer { get; set; }
         public List<web.ViewModels.SalesOrderItemModel> SalesOrderItems { get; set; }
+        public int grandTotal { get; set; }
         public bool isPaid { get; set; }
     }
 }

@@ -384,6 +384,9 @@ namespace SolarCoffee.data.Migrations
                     b.Property<DateTime>("createdOn")
                         .HasColumnType("timestamp without time zone");
 
+                    b.Property<int>("grandTotal")
+                        .HasColumnType("integer");
+
                     b.Property<bool>("isPaid")
                         .HasColumnType("boolean");
 
@@ -411,6 +414,9 @@ namespace SolarCoffee.data.Migrations
                         .HasColumnType("integer");
 
                     b.Property<int>("quantity")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("subTotal")
                         .HasColumnType("integer");
 
                     b.HasKey("id");

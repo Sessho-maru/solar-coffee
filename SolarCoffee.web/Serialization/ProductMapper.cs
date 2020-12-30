@@ -1,5 +1,3 @@
-using SolarCoffee.web.ViewModels;
-
 namespace SolarCoffee.web.Serialization
 {
     public static class ProductMapper

@@ -10,7 +10,7 @@ using SolarCoffee.data;
 namespace SolarCoffee.data.Migrations
 {
     [DbContext(typeof(SolarDbContext))]
-    [Migration("20201226145204_init")]
+    [Migration("20201230142303_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -386,6 +386,9 @@ namespace SolarCoffee.data.Migrations
                     b.Property<DateTime>("createdOn")
                         .HasColumnType("timestamp without time zone");
 
+                    b.Property<int>("grandTotal")
+                        .HasColumnType("integer");
+
                     b.Property<bool>("isPaid")
                         .HasColumnType("boolean");
 
@@ -413,6 +416,9 @@ namespace SolarCoffee.data.Migrations
                         .HasColumnType("integer");
 
                     b.Property<int>("quantity")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("subTotal")
                         .HasColumnType("integer");
 
                     b.HasKey("id");

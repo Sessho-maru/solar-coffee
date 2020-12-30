@@ -40,14 +40,13 @@
             <div class="invoice-cart" v-if="itemCart.length > 0">
                 <div class="runningTotal">
                     <h3>Running Total:</h3>
-                    {{ runningTotal() | price }}
+                    {{ this.grandTotal | price }}
                 </div>
 
                 <hr />
 
                 <div v-html="displayTable()"></div>
             </div>
-
         </div>
         
         <div class="invoice-step" v-if="invoiceStep === 3"> <!-- Review Order -->
@@ -101,10 +100,14 @@ import SolarButton from '../components/SolarButton.vue';
 import { IInvoice, IItemInCart } from '../types/Invoice';
 import { ICustomer } from '../types/Customers';
 import { IProductInventory } from '../types/Product';
+import { IProduct } from '../types/Product';
 
 import CustomerService from '../services/customer_service';
 import InventoryService from '../services/inventory_service';
 import InvoiceService from '../services/invoice_service';
+
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 const customerService = new CustomerService();
 const inventoryService = new InventoryService();
@@ -121,7 +124,8 @@ export default class InvoiceNew extends Vue {
     invoiceStep: number = 1;
     invoice: IInvoice = {
         customerId: 0,
-        items: []
+        items: [],
+        grandTotal: 0
     }
 
     customers: ICustomer[] = [];
@@ -132,8 +136,11 @@ export default class InvoiceNew extends Vue {
     itemCart: IItemInCart[] = [];
     selectedItem: IItemInCart = {
         product: undefined,
-        quantity: 0
+        quantity: 0,
+        subTotal: 0
     }
+
+    grandTotal: number = 0;
 
     displayTable(): string
     {
@@ -149,13 +156,14 @@ export default class InvoiceNew extends Vue {
         `;
 
         this.itemCart.map((each) => {
+            let product: IProduct = each.product.product;
             table += `
                 <tr>
-                    <td>${ each.product.product.name }</td>
-                    <td>${ each.product.product.description }</td>
+                    <td>${ product.name }</td>
+                    <td>${ product.description }</td>
                     <td>${ each.quantity }</td>
-                    <td>${ each.product.product.price }</td>
-                    <td>${ this.$options.filters.price(each.product.product.price * each.quantity) }</td>
+                    <td>${ product.price }</td>
+                    <td>${ this.$options.filters.price(each.subTotal) }</td>
                 </tr>
             `
         });
@@ -170,7 +178,7 @@ export default class InvoiceNew extends Vue {
                 <tfoot>
                     <tr>
                     <td colspan="4" style="font-weight: bold;">Balance due upon receipt:</td>
-                    <td style="font-weight: bold; color: #22a885;">${ this.$options.filters.price(this.runningTotal() )}</td>
+                    <td style="font-weight: bold; color: #22a885;">${ this.$options.filters.price(this.grandTotal) }</td>
                     </tr>
                 </tfoot>
             `
@@ -179,25 +187,45 @@ export default class InvoiceNew extends Vue {
         return table + `</table>`;
     }
 
+    created(): void
+    {
+        this.fetchData();
+    }
+
     async fetchData(): Promise<void>
     {
         this.customers = await customerService.getCustomers();
         this.inventory = await inventoryService.getInventory();
     }
 
-    async created(): Promise<void>
-    {
-        await this.fetchData();
-    }
-
     async submitInvoice(): Promise<void>
     {
         this.invoice = {
             customerId: this.selectedCustomerId,
-            items: this.itemCart
+            items: this.itemCart,
+            grandTotal: this.grandTotal
         }
 
+        console.log(this.invoice);
+
         await invoiceService.makeNewInvoice(this.invoice);
+
+        this.downloadPdf();
+        this.$router.push('/orders');
+    }
+
+    downloadPdf(): void
+    {
+        let pdf = new jsPDF('p', 'pt', 'a4', true);
+        let invoice = document.getElementById('invoice');
+        let width = this.$refs.invoice.clientWidth;
+        let height = this.$refs.invoice.clientHeight;
+
+        html2canvas(invoice).then(canvas => {
+            let image = canvas.toDataURL('image/png');
+            pdf.addImage(image, "PNG", 0, 0, width * 0.40, height * 0.40);
+            pdf.save("invoice");
+        });
     }
 
     get selectedCustomer(): ICustomer
@@ -212,24 +240,33 @@ export default class InvoiceNew extends Vue {
     addItem(): void
     {
         let isAlready = false;
+
         this.selectedItem.quantity = Number(this.selectedItem.quantity);
+        this.selectedItem.subTotal = this.selectedItem.product.product.price * this.selectedItem.quantity;
 
         this.itemCart.map((each) => {
             if (each.product.id === this.selectedItem.product.product.id)
             {
                 isAlready = true;
                 each.quantity += this.selectedItem.quantity;
-
-                this.selectedItem = { product: undefined, quantity: 0 };
-                return;
+                each.subTotal = each.product.product.price * each.quantity;
             }   
         });
 
         if (isAlready === false)
         {
             this.itemCart.push(this.selectedItem);
-            this.selectedItem = { product: undefined, quantity: 0 };
         }
+
+        let acc: number = 0;
+        this.itemCart.map((each) => {
+            acc += each.subTotal;
+            this.grandTotal = acc;
+        });
+
+        this.selectedItem = { product: undefined, quantity: 0, subTotal: 0 };
+
+        console.log(this.itemCart);
     }
 
     isPossibleNext(): boolean
@@ -280,9 +317,9 @@ export default class InvoiceNew extends Vue {
         this.invoiceStep += 1;
     }
     
-    startOver()
+    startOver(): void
     {
-        this.invoice = { customerId: 0, items: [] };
+        this.invoice = { customerId: 0, items: [], grandTotal: 0 };
         this.itemCart = [];
         this.invoiceStep = 1;
     }
@@ -290,17 +327,6 @@ export default class InvoiceNew extends Vue {
     finalizeOrder(): void
     {
         this.invoiceStep = 3;
-    }
-
-    runningTotal(): number
-    {
-        let total: number = 0;
-        this.itemCart.map((each) => {
-            let item: IItemInCart = each;
-            total += item.product.product.price * each.quantity;
-        });
-
-        return total;
     }
 }
 </script>
